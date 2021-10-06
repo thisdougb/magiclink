@@ -1,4 +1,4 @@
-module github.com/goscot/cleango
+module github.com/thisdougb/magiclink
 
 go 1.16
 
