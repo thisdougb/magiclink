@@ -1,4 +1,4 @@
-package requestlink
+package send
 
 import ()
 
@@ -11,5 +11,5 @@ type Repository interface {
 type Reader interface{}
 
 type Writer interface {
-	SetThingStatus(thingID int, status bool) error
+	SubmitSendLinkRequest(email string, linkID string, sessionID string) error
 }

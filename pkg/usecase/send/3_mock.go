@@ -1,6 +1,6 @@
 // +build dev test
 
-package requestlink
+package send
 
 import ()
 

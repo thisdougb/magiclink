@@ -1,6 +1,6 @@
 // +build dev test
 
-package requestlink
+package send
 
 import (
 	"errors"
@@ -11,22 +11,22 @@ import (
 // using a test table
 var TestItems = []struct {
 	comment       string // a comment used to identify test in output
-	thingID       int    // in our mock we use this value to affect the return values
+	email         string // in our mock we use this value to affect the return values
 	expectedError error
 }{
 	{
-		comment:       "update existing thing",
-		thingID:       1,
+		comment:       "send valid email",
+		email:         "user@domain.com",
 		expectedError: nil,
 	},
 	{
-		comment:       "thing does not exist",
-		thingID:       2,
-		expectedError: errors.New("thing not found"),
+		comment:       "invalid email",
+		email:         "@domain.com",
+		expectedError: errors.New("email invalid"),
 	},
 	{
 		comment:       "datastore error",
-		thingID:       3,
+		email:         "fail@datastore.error",
 		expectedError: errors.New("datastore error"),
 	},
 }
@@ -38,7 +38,7 @@ func TestRequestLink(t *testing.T) {
 
 	for _, item := range TestItems {
 
-		err := s.RequestLink(item.thingID)
+		err := s.Send(item.email)
 		assert.Equal(t, item.expectedError, err, item.comment)
 	}
 }

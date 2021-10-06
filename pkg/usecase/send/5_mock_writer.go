@@ -1,6 +1,6 @@
 // +build dev test
 
-package requestlink
+package send
 
 import (
 	"errors"
@@ -11,13 +11,9 @@ type MockWriter struct{}
 //
 // Mock methods here, with conditionals enabling testing of return values
 //
-func (m *MockWriter) SetThingStatus(thingID int, status bool) error {
+func (m *MockWriter) SubmitSendLinkRequest(email string, linkID string, sessionID string) error {
 
-	if thingID == 2 {
-		return errors.New("thing not found")
-	}
-
-	if thingID == 3 {
+	if email == "fail@datastore.error" {
 		return errors.New("datastore error")
 	}
 
