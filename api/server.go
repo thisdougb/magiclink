@@ -4,7 +4,7 @@ import (
 	"github.com/thisdougb/magiclink/api/handlers"
 	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/datastore/redis"
-	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/pkg/usecase/requestlink"
 	"log"
 	"net/http"
 	"os"
@@ -21,9 +21,9 @@ func main() {
 	}
 	defer ds.Disconnect()
 
-	env := &handlers.Env{EnableThingService: enablething.NewService(ds)}
+	env := &handlers.Env{RequestLinkService: requestlink.NewService(ds)}
 
-	http.HandleFunc("/thing/enable/", env.EnableThing)
+	http.HandleFunc("/send/", env.RequestLink)
 
 	log.Println("webserver.Start(): listening on port", config.API_PORT)
 	log.Fatal(http.ListenAndServe(":"+config.API_PORT, nil))

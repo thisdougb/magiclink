@@ -3,7 +3,7 @@ package handlers
 import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
-	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/pkg/usecase/requestlink"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -57,17 +57,17 @@ var TestEnableThingItems = []struct {
 func TestMagicLinkRequestWeb(t *testing.T) {
 
 	// create our mock service
-	r := enablething.NewMockRepository()
-	enableThingService := enablething.NewService(r)
+	r := requestlink.NewMockRepository()
+	requestLinkService := requestlink.NewService(r)
 
 	// inject mock service
-	env := &Env{EnableThingService: enableThingService}
+	env := &Env{RequestLinkService: requestLinkService}
 
 	for _, item := range TestEnableThingItems {
 
 		// httptest lets us interrogate the http response
 		rr := httptest.NewRecorder()
-		handler := http.HandlerFunc(env.EnableThing)
+		handler := http.HandlerFunc(env.RequestLink)
 
 		bodyReader := bytes.NewReader([]byte(item.bodyData))
 

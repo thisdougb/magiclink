@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (env *Env) EnableThing(w http.ResponseWriter, r *http.Request) {
+func (env *Env) RequestLink(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -23,7 +23,7 @@ func (env *Env) EnableThing(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = env.EnableThingService.EnableThing(input.ThingID)
+	err = env.RequestLinkService.RequestLink(input.ThingID)
 	if err != nil {
 		if err.Error() == "thing not found" {
 			http.Error(w, "Not found", http.StatusNotFound)

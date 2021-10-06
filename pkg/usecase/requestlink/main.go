@@ -1,11 +1,11 @@
-package enablething
+package requestlink
 
 import (
 	"github.com/thisdougb/magiclink/pkg/entity/thing"
 )
 
 // EnableThing set the status of a Thing
-func (s *Service) EnableThing(thingID int) error {
+func (s *Service) RequestLink(thingID int) error {
 
 	// an example of using an entity in a usecase
 	thing := thing.NewThing(thingID)

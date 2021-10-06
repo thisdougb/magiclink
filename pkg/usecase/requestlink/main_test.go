@@ -1,6 +1,6 @@
 // +build dev test
 
-package enablething
+package requestlink
 
 import (
 	"errors"
@@ -31,14 +31,14 @@ var TestItems = []struct {
 	},
 }
 
-func TestEnableThing(t *testing.T) {
+func TestRequestLink(t *testing.T) {
 
 	mockDatastore := NewMockRepository()
 	s := NewService(mockDatastore)
 
 	for _, item := range TestItems {
 
-		err := s.EnableThing(item.thingID)
+		err := s.RequestLink(item.thingID)
 		assert.Equal(t, item.expectedError, err, item.comment)
 	}
 }

@@ -1,6 +1,6 @@
 // +build dev test
 
-package enablething
+package requestlink
 
 import (
 	"errors"
