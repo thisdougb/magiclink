@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/goscot/cleango/api/handlers"
-	"github.com/goscot/cleango/config"
-	"github.com/goscot/cleango/pkg/datastore/redis"
-	"github.com/goscot/cleango/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/api/handlers"
+	"github.com/thisdougb/magiclink/config"
+	"github.com/thisdougb/magiclink/pkg/datastore/redis"
+	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
 	"log"
 	"net/http"
 	"os"

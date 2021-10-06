@@ -1,7 +1,7 @@
 package enablething
 
 import (
-	"github.com/goscot/cleango/pkg/entity/thing"
+	"github.com/thisdougb/magiclink/pkg/entity/thing"
 )
 
 // EnableThing set the status of a Thing

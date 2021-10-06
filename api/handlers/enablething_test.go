@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"bytes"
-	"github.com/goscot/cleango/pkg/usecase/enablething"
 	"github.com/stretchr/testify/assert"
+	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
 	"net/http"
 	"net/http/httptest"
 	"testing"

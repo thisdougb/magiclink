@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/goscot/cleango/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
 	"log"
 )
 

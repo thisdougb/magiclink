@@ -1,7 +1,7 @@
 package datastore
 
 import (
-	"github.com/goscot/cleango/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/pkg/usecase/enablething"
 )
 
 // DatastoreInterface methods are implemented by any concrete datastore
