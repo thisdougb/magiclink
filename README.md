@@ -26,6 +26,6 @@ redis> ttl magiclink:auth:id:AlmmKroepZGnQ61RI8n2vwAZ1dUlhypji1ERGuhY1CwaKhi1fqy
 A job is added to the send queue, to be processed by some external smtp-sender process.
 This package does not send smtp emails.
 ```
-127.0.0.1:6379> lrange "magiclink:queue:send" 0 1
+redis> lrange "magiclink:queue:send" 0 1
 1) "{\"Email\":\"someuser@domain.com\",\"MagicLinkID\":\"AlmmKroepZGnQ61RI8n2vwAZ1dUlhypji1ERGuhY1CwaKhi1fqyZUQuNSPjuavMJ\",\"Timestamp\":1634976117}"
 ```
