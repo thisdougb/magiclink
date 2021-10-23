@@ -10,6 +10,9 @@ func (d *Datastore) GetExpireAccountFromID(magiclinkid string) (string, error) {
 
 	data, err := d.getExpire(key)
 	if err != nil {
+		if err.Error() == "redis: nil" { // not found
+			return "", nil
+		}
 		return "", err
 	}
 
