@@ -1,6 +1,7 @@
 package datastore
 
 import (
+	"github.com/thisdougb/magiclink/pkg/usecase/auth"
 	"github.com/thisdougb/magiclink/pkg/usecase/send"
 )
 
@@ -10,4 +11,5 @@ type DatastoreInterface interface {
 	Disconnect()
 
 	send.Repository
+	auth.Repository
 }

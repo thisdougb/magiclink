@@ -21,7 +21,7 @@ func (s *Service) Send(email string) error {
 	}
 
 	// if stats permit, submit request
-    ttlSeconds := 60 * config.LOGINEXPIRES_MINUTES // seconds * minutes
+    ttlSeconds := 60 * config.MAGICLINK_EXPIRES_MINUTES // seconds * minutes
 
     err = s.repo.StoreAuthID(sr.Email, sr.MagicLinkID, ttlSeconds)
     if err != nil {

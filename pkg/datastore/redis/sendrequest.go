@@ -4,8 +4,6 @@ import (
 	"fmt"
 )
 
-import ()
-
 func (d *Datastore) SubmitSendLinkRequest(data string) error {
 
 	// push to FIFO queue, so the notify process will send an email

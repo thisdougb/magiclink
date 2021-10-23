@@ -9,10 +9,17 @@
 package config
 
 const (
-	API_PORT = "80"
+	API_PORT = "8080"
 
 	DB_HOST = "localhost"
 	DB_PORT = "6379"
 
-	LOGINEXPIRES_MINUTES = 15
+	MAGICLINK_ID_LENGTH       = 64
+	MAGICLINK_EXPIRES_MINUTES = 15
+
+	SESSION_ID_LENGTH          = 64
+	SESSION_ID_EXPIRES_MINUTES = 60
+
+	HttpSessionTTL  = time.Hour * time.Duration(24) * 7
+	HttpSessionName = "magiclink:sessionid"
 )

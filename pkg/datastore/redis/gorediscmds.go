@@ -25,3 +25,13 @@ func (d *Datastore) setWithExpiry(key string, data string, ttlSeconds int) error
 
 	return nil
 }
+
+func (d *Datastore) getExpire(key string) (string, error) {
+
+	data, err := d.client.GetEx(d.ctx, key, 1*time.Millisecond).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return data, nil
+}

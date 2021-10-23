@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"github.com/thisdougb/magiclink/pkg/usecase/auth"
 	"github.com/thisdougb/magiclink/pkg/usecase/send"
 	"log"
+	"net/http"
+	"time"
 )
 
 /*
@@ -13,4 +16,18 @@ import (
 type Env struct {
 	Logger      *log.Logger
 	SendService *send.Service
+	AuthService *auth.Service
+}
+
+func (e *Env) createCookie(sessionName string, sessionID string, expiration time.Time) *http.Cookie {
+
+	cookie := http.Cookie{
+		Name:     sessionName,
+		Value:    sessionID,
+		Path:     "/",
+		Expires:  expiration,
+		SameSite: http.SameSiteStrictMode,
+	}
+
+	return &cookie
 }
