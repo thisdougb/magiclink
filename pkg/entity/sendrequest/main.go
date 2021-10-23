@@ -1,4 +1,4 @@
-package linkrequest
+package sendrequest
 
 import (
 	"github.com/idthings/alphanum"
@@ -11,23 +11,23 @@ const (
 	SESSION_ID_LENGTH   = 64
 )
 
-type LinkRequest struct {
+type SendRequest struct {
 	Email       string
 	MagicLinkID string
 	SessionID   string
 	Timestamp   int64
 }
 
-func NewLinkRequest(email string) *LinkRequest {
+func NewSendRequest(email string) *SendRequest {
 
 	// validate email
 	if !validator.IsValidEmail(email) {
-		return &LinkRequest{}
+		return &SendRequest{}
 	}
 
 	magiclinkid := alphanum.New(MAGICLINK_ID_LENGTH)
 	sessionid := alphanum.New(SESSION_ID_LENGTH)
 	timestamp := time.Now().Unix()
 
-	return &LinkRequest{email, magiclinkid, sessionid, timestamp}
+	return &SendRequest{email, magiclinkid, sessionid, timestamp}
 }
