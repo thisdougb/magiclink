@@ -8,6 +8,10 @@
 
 package config
 
+import (
+	"time"
+)
+
 const (
 	API_PORT = "8080"
 
@@ -21,5 +25,5 @@ const (
 	SESSION_ID_EXPIRES_MINUTES = 60
 
 	HttpSessionTTL  = time.Hour * time.Duration(24) * 7
-	HttpSessionName = "magiclink:sessionid"
+	HttpSessionName = "ml-sessionid"
 )

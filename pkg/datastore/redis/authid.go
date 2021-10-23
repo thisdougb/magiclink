@@ -19,10 +19,10 @@ func (d *Datastore) GetExpireAccountFromID(magiclinkid string) (string, error) {
 	return data, nil
 }
 
-func (d *Datastore) StoreSessionID(accountID string, sessionID string, ttlSeconds int) error {
+func (d *Datastore) StoreSessionID(email string, sessionID string, ttlSeconds int) error {
 
 	key := fmt.Sprintf("%s:%s", sessionIDsKey, sessionID)
 
-	return d.setWithExpiry(key, accountID, ttlSeconds)
+	return d.setWithExpiry(key, email, ttlSeconds)
 
 }

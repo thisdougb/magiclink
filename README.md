@@ -29,3 +29,21 @@ This package does not send smtp emails.
 redis> lrange "magiclink:queue:send" 0 1
 1) "{\"Email\":\"someuser@domain.com\",\"MagicLinkID\":\"AlmmKroepZGnQ61RI8n2vwAZ1dUlhypji1ERGuhY1CwaKhi1fqyZUQuNSPjuavMJ\",\"Timestamp\":1634976117}"
 ```
+
+### Authentication
+Using the magic link creates a session ID linked to the email address.
+This is returned in a cookie to the caller, as part of an http redirect.
+```
+$ curl -i http://localhost:8080/auth/AlmmKroepZGnQ61RI8n2vwAZ1dUlhypji1ERGuhY1CwaKhi1fqyZUQuNSPjuavMJ
+HTTP/1.1 302 Found
+Content-Type: text/html; charset=utf-8
+Location: /
+Set-Cookie: ml-sessionid=HqnWnEwCGNqVQjXR24iQ5u0maK8VDSpqIk4uVH2TicotPdWfr2vfeEMLDaMvfX0o; Path=/; Expires=Sat, 30 Oct 2021 12:30:25 GMT; SameSite=Strict
+Date: Sat, 23 Oct 2021 12:30:25 GMT
+Content-Length: 24
+```
+In redis, the session id contained in the cookie can be used to get the account id.
+```
+redis> get magiclink:session:HqnWnEwCGNqVQjXR24iQ5u0maK8VDSpqIk4uVH2TicotPdWfr2vfeEMLDaMvfX0o
+"someuser@domain.com"
+```
