@@ -13,7 +13,7 @@ OK
 An expiring key is created, with the requesting email address as data.
 This will be used when authenticating the login request, when the link in the login email is clicked.
 ```
-redis> keys magiclink:auth:id*
+redis> keys magiclink:id:*
 1) "magiclink:id:AlmmKroepZGnQ61RI8n2vwAZ1dUlhypji1ERGuhY1CwaKhi1fqyZUQuNSPjuavMJ"
 2) "magiclink:id:p2FJt1iUXKZU9OjIrzRjrbgr1Lj1momj7zKmm0wgSGPbRXnUcJo6IUuo4Wuxl2tW"
 3) "magiclink:id:sVm4ECyEaec1HYBI9yP8nqLPMP1f8PXSar2O1ZN5HzyNn1WCr5Zx7JuInMUB8o8t"
