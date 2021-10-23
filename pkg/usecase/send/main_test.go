@@ -29,6 +29,11 @@ var TestItems = []struct {
 		email:         "fail@datastore.error",
 		expectedError: errors.New("datastore error"),
 	},
+	{
+		comment:       "StoreAuthID datastore error",
+		email:         "StoreAuthID@datastore.error",
+		expectedError: errors.New("datastore error"),
+	},
 }
 
 func TestRequestLink(t *testing.T) {

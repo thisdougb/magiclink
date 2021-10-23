@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/thisdougb/magiclink/pkg/usecase/requestlink"
+	"github.com/thisdougb/magiclink/pkg/usecase/send"
 	"log"
 )
 
@@ -11,6 +11,6 @@ import (
 */
 
 type Env struct {
-	Logger             *log.Logger
-	RequestLinkService *requestlink.Service
+	Logger      *log.Logger
+	SendService *send.Service
 }

@@ -11,5 +11,6 @@ type Repository interface {
 type Reader interface{}
 
 type Writer interface {
-	SubmitSendLinkRequest(email string, linkID string, sessionID string) error
+	SubmitSendLinkRequest(data string) error
+	StoreAuthID(email string, id string, ttlSeconds int) error
 }

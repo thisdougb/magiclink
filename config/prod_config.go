@@ -13,4 +13,6 @@ const (
 
 	DB_HOST = "localhost"
 	DB_PORT = "6379"
+
+	LOGINEXPIRES_MINUTES = 15
 )
