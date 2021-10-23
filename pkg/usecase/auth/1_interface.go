@@ -16,5 +16,5 @@ type Writer interface {
 	// expiring the key at the same time
 	GetExpireAccountFromID(magiclinkid string) (string, error)
 
-	StoreSessionID(accountID string, sessionID string, ttlSeconds int) error
+	StoreSessionID(email string, sessionID string, ttlSeconds int) error
 }

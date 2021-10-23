@@ -27,12 +27,12 @@ func (m *MockReader) GetExpireAccountFromID(magiclinkid string) (string, error) 
 	return "", nil
 }
 
-func (m *MockReader) StoreSessionID(accountID string, sessionID string, ttlSeconds int) error {
+func (m *MockReader) StoreSessionID(email string, sessionID string, ttlSeconds int) error {
 
-	if accountID == "someuser@domain.com" {
+	if email == "someuser@domain.com" {
 		return nil
 	}
-	if accountID == "sessionid@datastore.error" {
+	if email == "sessionid@datastore.error" {
 		return errors.New("datastore error")
 	}
 
