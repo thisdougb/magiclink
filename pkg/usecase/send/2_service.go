@@ -1,4 +1,4 @@
-package enablething
+package send
 
 // Service allows us to inject a mock repo
 type Service struct {

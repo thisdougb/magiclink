@@ -2,15 +2,15 @@ package handlers
 
 import (
 	"bytes"
-	"github.com/goscot/cleango/pkg/usecase/enablething"
 	"github.com/stretchr/testify/assert"
+	"github.com/thisdougb/magiclink/pkg/usecase/send"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 // we can't really test the html output here
-var TestEnableThingItems = []struct {
+var RequestLinkTestItems = []struct {
 	comment      string
 	httpURL      string
 	httpMethod   string
@@ -19,37 +19,30 @@ var TestEnableThingItems = []struct {
 }{
 	{
 		comment:      "valid request",
-		httpURL:      "http://localhost/thing/enable/",
+		httpURL:      "http://localhost/requestlink/",
 		httpMethod:   "POST",
-		bodyData:     `{"thing_id":1}`,
+		bodyData:     `{"email":"user@domain.com"}`,
 		expectStatus: 200,
 	},
 	{
 		comment:      "invalid http method",
-		httpURL:      "http://localhost/thing/enable/",
+		httpURL:      "http://localhost/requestlink/",
 		httpMethod:   "GET",
-		bodyData:     `{"thing_id":1}`,
+		bodyData:     `{"email":"user@domain.com"}`,
 		expectStatus: 405,
 	},
 	{
-		comment:      "incorrect json data",
-		httpURL:      "http://localhost/thing/enable/",
+		comment:      "malformed json body",
+		httpURL:      "http://localhost/requestlink/",
 		httpMethod:   "POST",
-		bodyData:     `{"thing_id":"two"}`,
+		bodyData:     `{"email":"user@domain.com`,
 		expectStatus: 400,
 	},
 	{
-		comment:      "thing does not exist",
-		httpURL:      "http://localhost/thing/enable/",
-		httpMethod:   "POST",
-		bodyData:     `{"thing_id":2}`,
-		expectStatus: 404,
-	},
-	{
 		comment:      "trigger datastore error",
-		httpURL:      "http://localhost/thing/enable/",
+		httpURL:      "http://localhost/requestlink/",
 		httpMethod:   "POST",
-		bodyData:     `{"thing_id":3}`,
+		bodyData:     `{"email":"fail@datastore.error"}`,
 		expectStatus: 500,
 	},
 }
@@ -57,17 +50,17 @@ var TestEnableThingItems = []struct {
 func TestMagicLinkRequestWeb(t *testing.T) {
 
 	// create our mock service
-	r := enablething.NewMockRepository()
-	enableThingService := enablething.NewService(r)
+	r := send.NewMockRepository()
+	sendService := send.NewService(r)
 
 	// inject mock service
-	env := &Env{EnableThingService: enableThingService}
+	env := &Env{SendService: sendService}
 
-	for _, item := range TestEnableThingItems {
+	for _, item := range RequestLinkTestItems {
 
 		// httptest lets us interrogate the http response
 		rr := httptest.NewRecorder()
-		handler := http.HandlerFunc(env.EnableThing)
+		handler := http.HandlerFunc(env.Send)
 
 		bodyReader := bytes.NewReader([]byte(item.bodyData))
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (env *Env) EnableThing(w http.ResponseWriter, r *http.Request) {
+func (env *Env) Send(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -14,7 +14,7 @@ func (env *Env) EnableThing(w http.ResponseWriter, r *http.Request) {
 
 	// define this close to its usage
 	var input struct {
-		ThingID int `json:"thing_id"`
+		Email string
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&input)
@@ -23,11 +23,8 @@ func (env *Env) EnableThing(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = env.EnableThingService.EnableThing(input.ThingID)
+	err = env.SendService.Send(input.Email)
 	if err != nil {
-		if err.Error() == "thing not found" {
-			http.Error(w, "Not found", http.StatusNotFound)
-		}
 		http.Error(w, "Internal error", http.StatusInternalServerError)
 	}
 

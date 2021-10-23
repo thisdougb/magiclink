@@ -1,7 +1,8 @@
 package datastore
 
 import (
-	"github.com/goscot/cleango/pkg/usecase/enablething"
+	"github.com/thisdougb/magiclink/pkg/usecase/auth"
+	"github.com/thisdougb/magiclink/pkg/usecase/send"
 )
 
 // DatastoreInterface methods are implemented by any concrete datastore
@@ -9,5 +10,6 @@ type DatastoreInterface interface {
 	Connect() bool
 	Disconnect()
 
-	enablething.Repository
+	send.Repository
+	auth.Repository
 }

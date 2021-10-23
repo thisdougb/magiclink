@@ -1,4 +1,4 @@
-package enablething
+package send
 
 import ()
 
@@ -11,5 +11,6 @@ type Repository interface {
 type Reader interface{}
 
 type Writer interface {
-	SetThingStatus(thingID int, status bool) error
+	SubmitSendLinkRequest(data string) error
+	StoreAuthID(email string, id string, ttlSeconds int) error
 }
