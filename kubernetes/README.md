@@ -6,7 +6,7 @@ I have added a k8s deployment yaml file for redis, for testing.
 
 Get the magiclink service and deployment spec:
 ```
-$ curl -sSLO https://raw.githubusercontent.com/thisdougb/kubernetes/magiclink.yaml
+$ curl -sSLO https://raw.githubusercontent.com/thisdougb/magiclink/main/kubernetes/magiclink.yaml
 $ kubectl apply -f magiclink.yaml    
 service/magiclink created
 deployment.apps/magiclink created
