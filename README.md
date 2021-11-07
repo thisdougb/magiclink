@@ -23,7 +23,7 @@ $
 ```
 For more details on running magiclink as a k8s service, see [these instructions](https://github.com/thisdougb/magiclink/tree/main/kubernetes)
 
-# Configuration
+### Configuration
 Configuration is via env vars, which is easy for container environments.
 
 All env vars are prefixed with *MAGICLINK_* to avoid clashes with other services.
