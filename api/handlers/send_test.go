@@ -52,6 +52,13 @@ var RequestLinkTestItems = []struct {
 		bodyData:     `{"email":"isratelimited@create.session"}`,
 		expectStatus: 429,
 	},
+	{
+		comment:      "trigger too many requests response",
+		httpURL:      "http://localhost/requestlink/",
+		httpMethod:   "POST",
+		bodyData:     `{"email":"getloginattempts@toomany.requests"}`,
+		expectStatus: 429,
+	},
 }
 
 func TestMagicLinkRequestWeb(t *testing.T) {

@@ -16,5 +16,5 @@ type Writer interface {
 	SubmitSendLinkRequest(data string) error
 	StoreAuthID(email string, id string, ttlSeconds int) error
 
-	LogLoginAttempt(email string) error
+	GetLoginAttempts(email string, sinceMinutes int) ([]string, error)
 }

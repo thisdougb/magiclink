@@ -3,30 +3,25 @@ package send
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/entity/sendrequest"
 )
 
-// Submut a Send task
+// Submit a Send task
 func (s *Service) Send(email string) error {
 
 	var cfg *config.Config // dynamic config settings
 
-	// get the logins for the rate limiting period of time
 	logins, err := s.repo.GetLoginAttempts(email, cfg.RATE_LIMIT_TIME_PERIOD_MINS())
 	if err != nil {
+		if err.Error() == "too many requests" {
+			return errors.New("too many requests")
+		}
 		return errors.New("GetLoginAttempts datastore error")
 	}
 
-	fmt.Println("logsin:", len(logins))
 	if len(logins) >= cfg.RATE_LIMIT_MAX_SEND_REQUESTS() {
 		return errors.New("email address is rate limited")
-	}
-
-	err = s.repo.LogLoginAttempt(email)
-	if err != nil {
-		return errors.New("LogLoginAttempt datastore error")
 	}
 
 	sr := sendrequest.NewSendRequest(email)
