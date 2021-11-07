@@ -18,7 +18,6 @@ func (d *Datastore) StoreAuthID(email string, id string, ttlSeconds int) error {
 
 	var cfg *config.Config // dynamic config settings
 	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), authIDsKey, id)
-	fmt.Println("key:", key)
 
 	return d.setWithExpiry(key, email, ttlSeconds)
 }
