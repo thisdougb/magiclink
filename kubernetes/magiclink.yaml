@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: magiclink
+spec:
+  selector:
+    app: magiclink
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magiclink
+  labels:
+    app: magiclink
+spec:
+  replicas: 1
+  selector: # used to target this deployment at pods
+    matchLabels:
+      app: magiclink
+  template: # defines a pod
+    metadata:
+      labels:
+        app: magiclink
+    spec:
+      containers:
+      - name: magiclink
+        image: thisdougb/magiclink:latest
+        ports:
+            - containerPort: 8080
+        env:
+            - name: MAGICLINK_API_PORT
+              value: "8080"
+            - name: "MAGICLINK_REDIS_HOST"
+              value: "redis"
+            - name: "MAGICLINK_REDIS_PORT"
+              value: "6379"
+            - name: "MAGICLINK_REDIS_KEY_PREFIX"
+              value: "magiclink:"
+            - name: "MAGICLINK_MAGICLINK_LENGTH"
+              value: "64"
+            - name: "MAGICLINK_MAGICLINK_EXPIRES_MINS"
+              value: "15"
+            - name: "MAGICLINK_SESSION_NAME"
+              value: "MagicLinkSession"
+            - name: "MAGICLINK_SESSION_ID_LENGTH"
+              value: "64"
+            - name: "MAGICLINK_SESSION_EXPIRES_MINS"
+              value: "10080"
