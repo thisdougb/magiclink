@@ -51,3 +51,7 @@ spec:
               value: "64"
             - name: "MAGICLINK_SESSION_EXPIRES_MINS"
               value: "10080"
+            - name: "RATE_LIMIT_MAX_SEND_REQUESTS"
+              value: "3"
+            - name: "RATE_LIMIT_TIME_PERIOD_MINS"
+              value: 15

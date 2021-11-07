@@ -45,6 +45,13 @@ var RequestLinkTestItems = []struct {
 		bodyData:     `{"email":"fail@datastore.error"}`,
 		expectStatus: 500,
 	},
+	{
+		comment:      "trigger rate limited response",
+		httpURL:      "http://localhost/requestlink/",
+		httpMethod:   "POST",
+		bodyData:     `{"email":"isratelimited@create.session"}`,
+		expectStatus: 429,
+	},
 }
 
 func TestMagicLinkRequestWeb(t *testing.T) {

@@ -68,3 +68,13 @@ func (c *Config) SESSION_ID_LENGTH() int {
 func (c *Config) SESSION_EXPIRES_MINS() int {
 	return c.getEnvAsInt("SESSION_EXPIRES_MINS", 10080) // 1 week
 }
+
+// The maximum number of send requests, for a particulate email address
+func (c *Config) RATE_LIMIT_MAX_SEND_REQUESTS() int {
+	return c.getEnvAsInt("RATE_LIMIT_MAX_SEND_REQUESTS", 3)
+}
+
+// The number of minutes over which rate limiting applies, so max 3 send requests per 15 min period
+func (c *Config) RATE_LIMIT_TIME_PERIOD_MINS() int {
+	return c.getEnvAsInt("RATE_LIMIT_TIME_PERIOD_MINS", 15)
+}

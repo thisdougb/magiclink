@@ -25,7 +25,13 @@ func (env *Env) Send(w http.ResponseWriter, r *http.Request) {
 
 	err = env.SendService.Send(input.Email)
 	if err != nil {
-		http.Error(w, "Internal error", http.StatusInternalServerError)
+		if err.Error() == "email address is rate limited" {
+			http.Error(w, "Too many requests", http.StatusTooManyRequests)
+			return
+		} else {
+			http.Error(w, "Internal error", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	http.Error(w, "OK", http.StatusOK)
