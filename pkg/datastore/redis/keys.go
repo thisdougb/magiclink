@@ -3,7 +3,7 @@ package redis
 // define key path constants
 
 const (
-	linkSendQueue = "magiclink:queue:send" // queue of objects for external notify process to send
-	authIDsKey    = "magiclink:id"         // magic link ids used for authentication
-	sessionIDsKey = "magiclink:session"
+	linkSendQueue = "queue:send" // queue of objects for external notify process to send
+	authIDsKey    = "id"         // magic link ids used for authentication
+	sessionIDsKey = "session"
 )

@@ -2,6 +2,7 @@ package redis
 
 import (
 	"fmt"
+	"github.com/thisdougb/magiclink/config"
 )
 
 func (d *Datastore) SubmitSendLinkRequest(data string) error {
@@ -15,7 +16,9 @@ func (d *Datastore) StoreAuthID(email string, id string, ttlSeconds int) error {
 	// we set to the key with a ttl, so it auto-magically cleans up. only the email
 	// is required.
 
-	key := fmt.Sprintf("%s:%s", authIDsKey, id)
+	var cfg *config.Config // dynamic config settings
+	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), authIDsKey, id)
+	fmt.Println("key:", key)
 
 	return d.setWithExpiry(key, email, ttlSeconds)
 }

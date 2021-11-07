@@ -48,6 +48,9 @@ func (c *Config) REDIS_HOST() string {
 func (c *Config) REDIS_PORT() string {
 	return c.getEnv("REDIS_PORT", "6379")
 }
+func (c *Config) REDIS_KEY_PREFIX() string {
+	return c.getEnv("REDIS_KEY_PREFIX", "magiclink:")
+}
 
 func (c *Config) MAGICLINK_LENGTH() int {
 	return c.getEnvAsInt("MAGICLINK_LENGTH", 64)

@@ -2,11 +2,14 @@ package redis
 
 import (
 	"fmt"
+	"github.com/thisdougb/magiclink/config"
 )
 
 func (d *Datastore) GetExpireAccountFromID(magiclinkid string) (string, error) {
 
-	key := fmt.Sprintf("%s:%s", authIDsKey, magiclinkid)
+	var cfg *config.Config // dynamic config settings
+
+	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), authIDsKey, magiclinkid)
 
 	data, err := d.getExpire(key)
 	if err != nil {
@@ -21,7 +24,9 @@ func (d *Datastore) GetExpireAccountFromID(magiclinkid string) (string, error) {
 
 func (d *Datastore) StoreSessionID(email string, sessionID string, ttlSeconds int) error {
 
-	key := fmt.Sprintf("%s:%s", sessionIDsKey, sessionID)
+	var cfg *config.Config // dynamic config settings
+
+	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), sessionIDsKey, sessionID)
 
 	return d.setWithExpiry(key, email, ttlSeconds)
 
