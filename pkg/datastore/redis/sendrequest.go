@@ -1,10 +1,11 @@
 package redis
 
 import (
+	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/idthings/alphanum"
 	"github.com/thisdougb/magiclink/config"
-	"log"
 	"strconv"
 	"time"
 )
@@ -34,57 +35,62 @@ func (d *Datastore) StoreAuthID(email string, id string, ttlSeconds int) error {
 func (d *Datastore) GetLoginAttempts(email string, ttlMinutes int) ([]string, error) {
 
 	var cfg *config.Config // dynamic config settings
-
 	var logins []string
 
 	key := fmt.Sprintf(LoginRequestsKeyFormat, email)
 	key = fmt.Sprintf("%s%s", cfg.REDIS_KEY_PREFIX(), key)
 
-	now := time.Now().UnixNano() / 1e6             // convert to milliseconds
-	since := now - int64((ttlMinutes * 60 * 1000)) // convert to milliseconds
-
-	// begin with clean out old login attempts
-	since = since - 1
-	_, err := d.client.ZRemRangeByScore(d.ctx, key, strconv.FormatInt(0, 10), strconv.FormatInt(since, 10)).Result()
-	if err != nil {
-		return logins, err
-	}
-
-	// now read the logins
-	values, err := d.client.ZRangeByScore(d.ctx, key, &redis.ZRangeBy{
-		Min:    strconv.FormatInt(since, 10),
-		Max:    strconv.FormatInt(now, 10),
+	// A secondary check for denial of service attempts. If there already too many
+	// login requests don't continue. I don't know how to do this better, before
+	// entering the pipeline (which will always add another login attempt)
+	result, err := d.client.ZRangeByScore(d.ctx, key, &redis.ZRangeBy{
+		Min:    "-inf",
+		Max:    "+inf",
 		Offset: 0,
 		Count:  -1,
 	}).Result()
 	if err != nil {
-		log.Println("data.GetOwnerLogins(): ", err)
 		return logins, err
 	}
+	if len(result) > cfg.RATE_LIMIT_MAX_SEND_REQUESTS() {
+		return logins, errors.New("too many requests")
+	}
 
-	for _, value := range values {
+	now := time.Now().UnixNano() / 1e6 // convert to milliseconds
+	nowStr := strconv.FormatInt(now, 10)
+
+	since := now - int64((ttlMinutes * 60 * 1000)) // convert to milliseconds
+	sinceStr := strconv.FormatInt(since, 10)
+
+	// BEGIN CRITICAL SECTION -----
+	pipe := d.client.TxPipeline()
+
+	// housekeeping, remove old login attempts - do this here simply for general efficiency
+	_ = pipe.ZRemRangeByScore(d.ctx, key, "-inf", sinceStr)
+
+	// now read the recent login attempts
+	values := pipe.ZRangeByScore(d.ctx, key, &redis.ZRangeBy{
+		Min:    sinceStr,
+		Max:    nowStr,
+		Offset: 0,
+		Count:  -1,
+	})
+
+	// record this login attempt
+	pipe.ZAdd(d.ctx, key, &redis.Z{
+		Score:  float64(now),
+		Member: alphanum.New(5), // ensure uniqueness, so every login counts
+	})
+
+	_, err = pipe.Exec(d.ctx)
+	if err != nil {
+		return logins, err
+	}
+	// END CRITICAL SECTION -----
+
+	for _, value := range values.Val() {
 		logins = append(logins, value)
 	}
 
 	return logins, nil
-}
-
-func (d *Datastore) LogLoginAttempt(email string) error {
-
-	var cfg *config.Config // dynamic config settings
-
-	key := fmt.Sprintf(LoginRequestsKeyFormat, email)
-	key = fmt.Sprintf("%s%s", cfg.REDIS_KEY_PREFIX(), key)
-
-	timestamp := time.Now().UnixNano() / 1e6 // convert to milliseconds
-
-	_, err := d.client.ZAdd(d.ctx, key, &redis.Z{
-		Score:  float64(timestamp),
-		Member: time.Now().Format("Mon Jan _2 15:04:05 2006"),
-	}).Result()
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

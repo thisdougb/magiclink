@@ -45,9 +45,9 @@ var TestItems = []struct {
 		expectedError: errors.New("GetLoginAttempts datastore error"),
 	},
 	{
-		comment:       "LogLoginAttempt datastore error",
-		email:         "logloginattempt@datastore.error",
-		expectedError: errors.New("LogLoginAttempt datastore error"),
+		comment:       "getloginattempts too many requests",
+		email:         "getloginattempts@toomany.requests",
+		expectedError: errors.New("too many requests"),
 	},
 }
 
