@@ -55,13 +55,13 @@ func (c *Config) MAGICLINK_LENGTH() int {
 func (c *Config) MAGICLINK_EXPIRES_MINS() int {
 	return c.getEnvAsInt("MAGICLINK_EXPIRES_MINS", 15)
 }
+
 func (c *Config) SESSION_NAME() string {
 	return c.getEnv("SESSION_NAME", "MagicLinkSession")
 }
-
 func (c *Config) SESSION_ID_LENGTH() int {
 	return c.getEnvAsInt("SESSION_ID_LENGTH", 64)
 }
 func (c *Config) SESSION_EXPIRES_MINS() int {
-	return c.getEnvAsInt("SESSION_EXPIRES_MINS", 60*24*7) // 1 week
+	return c.getEnvAsInt("SESSION_EXPIRES_MINS", 10080) // 1 week
 }
