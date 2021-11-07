@@ -2,7 +2,7 @@
 
 [![release](https://github.com/thisdougb/magiclink/actions/workflows/release.yaml/badge.svg)](https://github.com/thisdougb/magiclink/actions/workflows/release.yaml)
 
-A Go package that implements magic-link login functionality.
+A little more detail on how magiclink works.
 
 ### Login Request
 To trigger a magic-link login request, call the /send/ url.

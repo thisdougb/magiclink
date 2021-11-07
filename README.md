@@ -23,3 +23,6 @@ Set-Cookie: MagicLinkSession=HqnWnEwCGNqVQjXR24iQ5u0maK8VDSpqIk4uVH2TicotPdWfr2v
 Date: Sat, 23 Oct 2021 12:30:25 GMT
 Content-Length: 24
 ```
+
+### Kubernetes
+To run magiclink as a k8s service, see [these instructions](https://github.com/thisdougb/magiclink/tree/main/kubernetes)
