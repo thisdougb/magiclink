@@ -19,13 +19,13 @@ type Env struct {
 	AuthService *auth.Service
 }
 
-func (e *Env) createCookie(sessionName string, sessionID string, expiration time.Time) *http.Cookie {
+func (e *Env) createCookie(sessionName string, sessionID string, expiresAtTime time.Time) *http.Cookie {
 
 	cookie := http.Cookie{
 		Name:     sessionName,
 		Value:    sessionID,
 		Path:     "/",
-		Expires:  expiration,
+		Expires:  expiresAtTime,
 		SameSite: http.SameSiteStrictMode,
 	}
 

@@ -9,6 +9,8 @@ import (
 
 func (env *Env) Auth(w http.ResponseWriter, r *http.Request) {
 
+	var cfg *config.Config // dynamic config settings
+
 	if r.Method != "GET" {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -33,8 +35,8 @@ func (env *Env) Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expiration := time.Now().Add(config.HttpSessionTTL)
-	cookie := env.createCookie(config.HttpSessionName, sessionID, expiration)
+	expiresAtTime := time.Now().Add(time.Duration(cfg.SESSION_EXPIRES_MINS()) * time.Minute)
+	cookie := env.createCookie(cfg.SESSION_NAME(), sessionID, expiresAtTime)
 
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/", http.StatusFound)

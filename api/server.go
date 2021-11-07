@@ -13,7 +13,9 @@ import (
 
 func main() {
 
-	ds := redis.NewRedisDatastore(config.DB_HOST, config.DB_PORT)
+	var cfg *config.Config // dynamic config settings
+
+	ds := redis.NewRedisDatastore(cfg.REDIS_HOST(), cfg.REDIS_PORT())
 
 	result := ds.Connect()
 	if !result {
@@ -30,6 +32,6 @@ func main() {
 	http.HandleFunc("/send/", env.Send)
 	http.HandleFunc("/auth/", env.Auth)
 
-	log.Println("webserver.Start(): listening on port", config.API_PORT)
-	log.Fatal(http.ListenAndServe(":"+config.API_PORT, nil))
+	log.Println("webserver.Start(): listening on port", cfg.API_PORT())
+	log.Fatal(http.ListenAndServe(":"+cfg.API_PORT(), nil))
 }

@@ -6,10 +6,12 @@ import (
 	"github.com/thisdougb/magiclink/config"
 )
 
-// EnableThing set the status of a Thing
+// Auth authenticates an inbound magic link url
 func (s *Service) Auth(magiclinkid string) (string, error) {
 
-	if !alphanum.IsValidAlphaNum(magiclinkid, config.MAGICLINK_ID_LENGTH) {
+	var cfg *config.Config // dynamic config settings
+
+	if !alphanum.IsValidAlphaNum(magiclinkid, cfg.MAGICLINK_LENGTH()) {
 		return "", errors.New("invalid magic link id")
 	}
 
@@ -23,8 +25,8 @@ func (s *Service) Auth(magiclinkid string) (string, error) {
 		return "", errors.New("magic link not found")
 	}
 
-	sessionID := alphanum.New(config.SESSION_ID_LENGTH)
-	ttlSeconds := 60 * config.SESSION_ID_EXPIRES_MINUTES // seconds * minutes
+	sessionID := alphanum.New(cfg.SESSION_ID_LENGTH())
+	ttlSeconds := 60 * cfg.SESSION_EXPIRES_MINS() // seconds * minutes
 
 	err = s.repo.StoreSessionID(email, sessionID, ttlSeconds)
 	if err != nil {

@@ -3,12 +3,14 @@ package send
 import (
 	"encoding/json"
 	"errors"
+	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/entity/sendrequest"
-    "github.com/thisdougb/magiclink/config"
 )
 
-// EnableThing set the status of a Thing
+// Submut a Send task
 func (s *Service) Send(email string) error {
+
+	var cfg *config.Config // dynamic config settings
 
 	sr := sendrequest.NewSendRequest(email)
 	if email != sr.Email {
@@ -21,12 +23,12 @@ func (s *Service) Send(email string) error {
 	}
 
 	// if stats permit, submit request
-    ttlSeconds := 60 * config.MAGICLINK_EXPIRES_MINUTES // seconds * minutes
+	ttlSeconds := 60 * cfg.MAGICLINK_EXPIRES_MINS() // seconds * minutes
 
-    err = s.repo.StoreAuthID(sr.Email, sr.MagicLinkID, ttlSeconds)
-    if err != nil {
-        return err
-    }
+	err = s.repo.StoreAuthID(sr.Email, sr.MagicLinkID, ttlSeconds)
+	if err != nil {
+		return err
+	}
 
 	err = s.repo.SubmitSendLinkRequest(string(data))
 	if err != nil {
