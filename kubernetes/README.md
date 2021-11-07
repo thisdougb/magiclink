@@ -43,3 +43,30 @@ In another terminal we can curl the magiclink service:
 $ curl --data '{"email":"me@mydomain.com"}' -X POST http://localhost:8080/send/
 OK
 ```
+And a quick check of redis:
+```
+$ kubectl exec -ti redis-df87ffcd6-vqh2b -- sh
+/data # redis-cli
+127.0.0.1:6379> keys *
+1) "magiclink:queue:send"
+2) "magiclink:id:yfeX4avwOUFlTXVX9bm9u6Or1Owcw4XnfKBPht7DBk2zEGp1cnDabhTEqNQ6Yk1Y"
+```
+Now we can check authentication:
+```
+$ curl -i http://localhost:8080/auth/yfeX4avwOUFlTXVX9bm9u6Or1Owcw4XnfKBPht7DBk2zEGp1cnDabhTEqNQ6Yk1Y
+HTTP/1.1 302 Found
+Location: /
+Set-Cookie: MagicLinkSession=6J7FtctN2RSpBRrFWXKVOuE2Rw5l3zdgGq1sFWDfXqhdntK5AGDJfMi2TUK2NE3M; Path=/; Expires=Sun, 14 Nov 2021 13:07:12 GMT;
+
+<a href="/">Found</a>.
+```
+And see our session ID:
+```
+/data # redis-cli
+127.0.0.1:6379> keys *
+1) "magiclink:queue:send"
+2) "magiclink:session:6J7FtctN2RSpBRrFWXKVOuE2Rw5l3zdgGq1sFWDfXqhdntK5AGDJfMi2TUK2NE3M"
+
+127.0.0.1:6379> get magiclink:session:6J7FtctN2RSpBRrFWXKVOuE2Rw5l3zdgGq1sFWDfXqhdntK5AGDJfMi2TUK2NE3M
+"me@mydomain.com"
+```
