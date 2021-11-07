@@ -79,6 +79,8 @@ var TestSessionItems = []struct {
 
 func TestSessionID(t *testing.T) {
 
+	var cfg *config.Config // dynamic config settings
+
 	mockDatastore := NewMockRepository()
 	s := NewService(mockDatastore)
 
@@ -89,7 +91,7 @@ func TestSessionID(t *testing.T) {
 			assert.Equal(t, item.expectedError, err, item.comment)
 			assert.Equal(t, 0, len(sessionID), item.comment)
 		} else {
-			assert.Equal(t, config.SESSION_ID_LENGTH, len(sessionID), item.comment)
+			assert.Equal(t, cfg.SESSION_ID_LENGTH(), len(sessionID), item.comment)
 		}
 
 	}

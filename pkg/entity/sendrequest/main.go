@@ -7,10 +7,6 @@ import (
 	"time"
 )
 
-const (
-	SESSION_ID_LENGTH = 64
-)
-
 type SendRequest struct {
 	Email       string
 	MagicLinkID string
@@ -19,12 +15,14 @@ type SendRequest struct {
 
 func NewSendRequest(email string) *SendRequest {
 
+	var cfg *config.Config // dynamic config settings
+
 	// validate email
 	if !validator.IsValidEmail(email) {
 		return &SendRequest{}
 	}
 
-	magiclinkid := alphanum.New(config.MAGICLINK_ID_LENGTH)
+	magiclinkid := alphanum.New(cfg.MAGICLINK_LENGTH())
 	timestamp := time.Now().Unix()
 
 	return &SendRequest{email, magiclinkid, timestamp}
