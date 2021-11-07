@@ -30,6 +30,7 @@ spec:
       containers:
       - name: magiclink
         image: thisdougb/magiclink:latest
+        imagePullPolicy: Always
         ports:
             - containerPort: 8080
         env:
@@ -51,7 +52,7 @@ spec:
               value: "64"
             - name: "MAGICLINK_SESSION_EXPIRES_MINS"
               value: "10080"
-            - name: "RATE_LIMIT_MAX_SEND_REQUESTS"
+            - name: "MAGICLINK_RATE_LIMIT_MAX_SEND_REQUESTS"
               value: "3"
-            - name: "RATE_LIMIT_TIME_PERIOD_MINS"
+            - name: "MAGICLINK_RATE_LIMIT_TIME_PERIOD_MINS"
               value: "15"
