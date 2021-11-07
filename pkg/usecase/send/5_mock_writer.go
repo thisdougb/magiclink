@@ -27,3 +27,12 @@ func (m *MockWriter) StoreAuthID(email string, id string, ttlSeconds int) error 
 	}
 	return nil
 }
+
+func (m *MockWriter) LogLoginAttempt(email string) error {
+
+	if email == "logloginattempt@datastore.error" {
+		return errors.New("datastore error")
+	}
+
+	return nil
+}

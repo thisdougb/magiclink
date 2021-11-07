@@ -34,6 +34,21 @@ var TestItems = []struct {
 		email:         "StoreAuthID@datastore.error",
 		expectedError: errors.New("datastore error"),
 	},
+	{
+		comment:       "is rate limited",
+		email:         "isratelimited@create.session",
+		expectedError: errors.New("email address is rate limited"),
+	},
+	{
+		comment:       "getloginattempts datastore error",
+		email:         "getloginsattempts@datastore.error",
+		expectedError: errors.New("GetLoginAttempts datastore error"),
+	},
+	{
+		comment:       "LogLoginAttempt datastore error",
+		email:         "logloginattempt@datastore.error",
+		expectedError: errors.New("LogLoginAttempt datastore error"),
+	},
 }
 
 func TestRequestLink(t *testing.T) {
