@@ -91,7 +91,7 @@ func TestSessionID(t *testing.T) {
 			assert.Equal(t, item.expectedError, err, item.comment)
 			assert.Equal(t, 0, len(sessionID), item.comment)
 		} else {
-			assert.Equal(t, cfg.SESSION_ID_LENGTH(), len(sessionID), item.comment)
+			assert.Equal(t, cfg.ValueAsInt("SESSION_ID_LENGTH"), len(sessionID), item.comment)
 		}
 
 	}

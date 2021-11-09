@@ -35,8 +35,8 @@ func (env *Env) Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expiresAtTime := time.Now().Add(time.Duration(cfg.SESSION_EXPIRES_MINS()) * time.Minute)
-	cookie := env.createCookie(cfg.SESSION_NAME(), sessionID, expiresAtTime)
+	expiresAtTime := time.Now().Add(time.Duration(cfg.ValueAsInt("SESSION_EXPIRES_MINS")) * time.Minute)
+	cookie := env.createCookie(cfg.ValueAsStr("SESSION_NAME"), sessionID, expiresAtTime)
 
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/", http.StatusFound)
