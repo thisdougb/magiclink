@@ -12,7 +12,7 @@ func (s *Service) Send(email string) error {
 
 	var cfg *config.Config // dynamic config settings
 
-	logins, err := s.repo.GetLoginAttempts(email, cfg.RATE_LIMIT_TIME_PERIOD_MINS())
+	logins, err := s.repo.GetLoginAttempts(email, cfg.ValueAsInt("RATE_LIMIT_TIME_PERIOD_MINS"))
 	if err != nil {
 		if err.Error() == "too many requests" {
 			return errors.New("too many requests")
@@ -20,7 +20,7 @@ func (s *Service) Send(email string) error {
 		return errors.New("GetLoginAttempts datastore error")
 	}
 
-	if len(logins) >= cfg.RATE_LIMIT_MAX_SEND_REQUESTS() {
+	if len(logins) >= cfg.ValueAsInt("RATE_LIMIT_MAX_SEND_REQUESTS") {
 		return errors.New("email address is rate limited")
 	}
 
@@ -35,7 +35,7 @@ func (s *Service) Send(email string) error {
 	}
 
 	// if stats permit, submit request
-	ttlSeconds := 60 * cfg.MAGICLINK_EXPIRES_MINS() // seconds * minutes
+	ttlSeconds := 60 * cfg.ValueAsInt("MAGICLINK_EXPIRES_MINS") // seconds * minutes
 
 	err = s.repo.StoreAuthID(sr.Email, sr.MagicLinkID, ttlSeconds)
 	if err != nil {

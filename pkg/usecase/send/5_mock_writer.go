@@ -43,7 +43,7 @@ func (m *MockWriter) GetLoginAttempts(email string, ttlMinutes int) ([]string, e
 		return logins, errors.New("too many requests")
 	}
 	if email == "isratelimited@create.session" {
-		for i := 0; i <= cfg.RATE_LIMIT_MAX_SEND_REQUESTS()+1; i++ {
+		for i := 0; i <= cfg.ValueAsInt("RATE_LIMIT_TIME_PERIOD_MINS")+1; i++ {
 			logins = append(logins, "test data")
 		}
 		return logins, nil

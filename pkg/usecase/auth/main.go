@@ -11,7 +11,7 @@ func (s *Service) Auth(magiclinkid string) (string, error) {
 
 	var cfg *config.Config // dynamic config settings
 
-	if !alphanum.IsValidAlphaNum(magiclinkid, cfg.MAGICLINK_LENGTH()) {
+	if !alphanum.IsValidAlphaNum(magiclinkid, cfg.ValueAsInt("MAGICLINK_LENGTH")) {
 		return "", errors.New("invalid magic link id")
 	}
 
@@ -25,8 +25,8 @@ func (s *Service) Auth(magiclinkid string) (string, error) {
 		return "", errors.New("magic link not found")
 	}
 
-	sessionID := alphanum.New(cfg.SESSION_ID_LENGTH())
-	ttlSeconds := 60 * cfg.SESSION_EXPIRES_MINS() // seconds * minutes
+	sessionID := alphanum.New(cfg.ValueAsInt("SESSION_ID_LENGTH"))
+	ttlSeconds := 60 * cfg.ValueAsInt("SESSION_EXPIRES_MINS") // seconds * minutes
 
 	err = s.repo.StoreSessionID(email, sessionID, ttlSeconds)
 	if err != nil {

@@ -9,7 +9,7 @@ func (d *Datastore) GetExpireAccountFromID(magiclinkid string) (string, error) {
 
 	var cfg *config.Config // dynamic config settings
 
-	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), authIDsKey, magiclinkid)
+	key := fmt.Sprintf("%s%s:%s", cfg.ValueAsStr("REDIS_KEY_PREFIX"), authIDsKey, magiclinkid)
 
 	data, err := d.getExpire(key)
 	if err != nil {
@@ -26,7 +26,7 @@ func (d *Datastore) StoreSessionID(email string, sessionID string, ttlSeconds in
 
 	var cfg *config.Config // dynamic config settings
 
-	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), sessionIDsKey, sessionID)
+	key := fmt.Sprintf("%s%s:%s", cfg.ValueAsStr("REDIS_KEY_PREFIX"), sessionIDsKey, sessionID)
 
 	return d.setWithExpiry(key, email, ttlSeconds)
 
