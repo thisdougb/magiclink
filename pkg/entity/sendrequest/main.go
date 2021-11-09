@@ -22,7 +22,8 @@ func NewSendRequest(email string) *SendRequest {
 		return &SendRequest{}
 	}
 
-	magiclinkid := alphanum.New(cfg.MAGICLINK_LENGTH())
+	//magiclinkid := alphanum.New(cfg.MAGICLINK_LENGTH())
+	magiclinkid := alphanum.New(cfg.ValueAsInt("MAGICLINK_LENGTH"))
 	timestamp := time.Now().Unix()
 
 	return &SendRequest{email, magiclinkid, timestamp}

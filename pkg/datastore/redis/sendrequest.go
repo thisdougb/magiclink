@@ -14,7 +14,7 @@ func (d *Datastore) SubmitSendLinkRequest(data string) error {
 
 	var cfg *config.Config // dynamic config settings
 
-	key := fmt.Sprintf("%s%s", cfg.REDIS_KEY_PREFIX(), linkSendQueue)
+	key := fmt.Sprintf("%s%s", cfg.ValueAsStr("REDIS_KEY_PREFIX"), linkSendQueue)
 
 	// push to FIFO queue, so the notify process will send an email
 	return d.lpushToList(key, data)
@@ -27,7 +27,7 @@ func (d *Datastore) StoreAuthID(email string, id string, ttlSeconds int) error {
 	// we set to the key with a ttl, so it auto-magically cleans up. only the email
 	// is required.
 
-	key := fmt.Sprintf("%s%s:%s", cfg.REDIS_KEY_PREFIX(), authIDsKey, id)
+	key := fmt.Sprintf("%s%s:%s", cfg.ValueAsStr("REDIS_KEY_PREFIX"), authIDsKey, id)
 
 	return d.setWithExpiry(key, email, ttlSeconds)
 }
@@ -38,7 +38,7 @@ func (d *Datastore) GetLoginAttempts(email string, ttlMinutes int) ([]string, er
 	var logins []string
 
 	key := fmt.Sprintf(LoginRequestsKeyFormat, email)
-	key = fmt.Sprintf("%s%s", cfg.REDIS_KEY_PREFIX(), key)
+	key = fmt.Sprintf("%s%s", cfg.ValueAsStr("REDIS_KEY_PREFIX"), key)
 
 	// A secondary check for denial of service attempts. If there already too many
 	// login requests don't continue. I don't know how to do this better, before
@@ -52,7 +52,7 @@ func (d *Datastore) GetLoginAttempts(email string, ttlMinutes int) ([]string, er
 	if err != nil {
 		return logins, err
 	}
-	if len(result) > cfg.RATE_LIMIT_MAX_SEND_REQUESTS() {
+	if len(result) > cfg.ValueAsInt("RATE_LIMIT_MAX_SEND_REQUESTS") {
 		return logins, errors.New("too many requests")
 	}
 
