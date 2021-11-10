@@ -29,8 +29,16 @@ func main() {
 		AuthService: auth.NewService(ds),
 	}
 
-	http.HandleFunc("/send/", env.Send)
-	http.HandleFunc("/auth/", env.Auth)
+	urlPrefix := cfg.ValueAsStr("URL_PREFIX")
+
+	// strip trailing / from url prefix if it exists
+	urlPrefixLength := len(urlPrefix)
+	if urlPrefixLength > 0 && urlPrefix[urlPrefixLength-1] == '/' {
+		urlPrefix = urlPrefix[:urlPrefixLength-1]
+	}
+
+	http.HandleFunc(urlPrefix+"/send/", env.Send)
+	http.HandleFunc(urlPrefix+"/auth/", env.Auth)
 
 	log.Println("magiclink.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
 	log.Fatal(http.ListenAndServe(":"+cfg.ValueAsStr("API_PORT"), nil))

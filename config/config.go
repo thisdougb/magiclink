@@ -17,6 +17,7 @@ const (
 // We don't use the envVarPrefix internally, to stay portable.
 var defaultValues = map[string]interface{}{
 	"API_PORT":                     "8080",             // api listens on this port
+	"URL_PREFIX":                   "/magiclink/",      // all inbound urls will be prefixed with this value
 	"REDIS_HOST":                   "localhost",        // redis host name
 	"REDIS_PORT":                   "6379",             // redis port
 	"REDIS_KEY_PREFIX":             "magiclink:",       // all redis keys will be prefixed with this value
