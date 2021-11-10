@@ -32,6 +32,6 @@ func main() {
 	http.HandleFunc("/send/", env.Send)
 	http.HandleFunc("/auth/", env.Auth)
 
-	log.Println("webserver.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
+	log.Println("magiclink.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
 	log.Fatal(http.ListenAndServe(":"+cfg.ValueAsStr("API_PORT"), nil))
 }
