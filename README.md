@@ -75,7 +75,7 @@ $ go run api/server.go
 2021/11/12 13:41:41 Adding handler for session owner endpoint: /session/owner/
 2021/11/12 13:41:41 magiclink.Start(): listening on port 8080
 ```
-With your configured token, you can now do a lookup to get the session owner.
+With the token, you can now do a lookup to get the session owner.
 ```
 $ curl --data '{"token":"Gyk185p9Aol28GJ6ncqUWo02uG57k9G0qo4vkno5FWRkyGT6dTXfzMFcfrhknzSW", \
                 "session":"gJlaNl84dnk7LHWuMyMUUG5sSHqOLnEdQcunTvKTSoEb7XYHbsecmhsB8wRO0TFm"}' \
