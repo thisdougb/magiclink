@@ -41,8 +41,8 @@ MAGICLINK_SESSION_ID_LENGTH | 64 | Length of cookie session ID string.
 MAGICLINK_SESSION_EXPIRES_MINS | 10080 | Expire time of session ID, in minutes.
 MAGICLINK_RATE_LIMIT_MAX_SEND_REQUESTS | 3 | Maximum number of send requests per email.
 MAGICLINK_RATE_LIMIT_TIME_PERIOD_MINS | 15 | Time period over which max requests are limited, in minutes.
-SESSION_OWNER_PROTECTED_URL |  | endpoint to lookup session owners - intended for protected use only
-SESSION_OWNER_ACCESS_TOKENS |  | a comma separate list of token id's
+MAGICLINK_SESSION_OWNER_PROTECTED_URL |  | endpoint to lookup session owners - intended for protected use only
+MAGICLINK_SESSION_OWNER_ACCESS_TOKENS |  | a comma separate list of token id's
 
 ### Login Request
 To trigger a magic-link login request, call the /send/ url.
@@ -68,8 +68,8 @@ You can configure magiclink to provide a session lookup service, useful in a con
 
 Exporting these env vars turns this feature on at magiclink startup time.
 ```
-$ export SESSION_OWNER_PROTECTED_URL='/session/owner/'
-$ export SESSION_OWNER_ACCESS_TOKENS='Gyk185p9Aol28GJ6ncqUWo02uG57k9G0qo4vkno5FWRkyGT6dTXfzMFcfrhknzSW'
+$ export MAGICLINK_SESSION_OWNER_PROTECTED_URL='/session/owner/'
+$ export MAGICLINK_SESSION_OWNER_ACCESS_TOKENS='Gyk185p9Aol28GJ6ncqUWo02uG57k9G0qo4vkno5FWRkyGT6dTXfzMFcfrhknzSW'
 $
 $ go run api/server.go
 2021/11/12 13:41:41 Adding handler for session owner endpoint: /session/owner/
@@ -88,7 +88,7 @@ So you can easily rotate the access token amongst a collection of services, with
 
 In the magiclink container:
 ```
-[magiclink] $ export SESSION_OWNER_ACCESS_TOKENS='token1,token2'
+[magiclink] $ export MAGICLINK_SESSION_OWNER_ACCESS_TOKENS='token1,token2'
 ```
 Now you can redeploy your main app with token2.
 ```
@@ -96,5 +96,5 @@ Now you can redeploy your main app with token2.
 ```
 Once that's done, you can then go back and with a rolling deployment of magiclink remove the first token:
 ```
-[magiclink] $ export SESSION_OWNER_ACCESS_TOKENS='token2'
+[magiclink] $ export MAGICLINK_SESSION_OWNER_ACCESS_TOKENS='token2'
 ```
