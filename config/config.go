@@ -30,7 +30,7 @@ var defaultValues = map[string]interface{}{
 	"RATE_LIMIT_MAX_SEND_REQUESTS": 3,                  // max requests for a magic link within TIME_PERIOD
 	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                 // time period within which we rate limit
 	"SESSION_OWNER_PROTECTED_URL":  "",                 // we can expose a protected URL to return session owner
-	"SESSION_OWNER_ACCESS_TOKEN":   "12345",            // access token to make api requests for session owner
+	"SESSION_OWNER_ACCESS_TOKENS":  "",                 // session owner access tokens - off by default
 }
 
 // Public methods here.

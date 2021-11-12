@@ -35,3 +35,13 @@ func (d *Datastore) getExpire(key string) (string, error) {
 
 	return data, nil
 }
+
+func (d *Datastore) getValueAtKey(key string) (string, error) {
+
+	data, err := d.client.Get(d.ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return data, nil
+}

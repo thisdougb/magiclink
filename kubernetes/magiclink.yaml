@@ -29,13 +29,15 @@ spec:
     spec:
       containers:
       - name: magiclink
-        image: thisdougb/magiclink:latest
+        image: thisdougb/magiclink:develop
         imagePullPolicy: Always
         ports:
             - containerPort: 8080
         env:
             - name: MAGICLINK_API_PORT
               value: "8080"
+            - name: MAGICLINK_URL_PREFIX
+              value: "/magiclink"
             - name: "MAGICLINK_REDIS_HOST"
               value: "redis"
             - name: "MAGICLINK_REDIS_PORT"
