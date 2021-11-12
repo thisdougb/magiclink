@@ -16,7 +16,7 @@ func (env *Env) Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	magiclinkid := strings.TrimPrefix(r.URL.Path, "/auth/")
+	magiclinkid := strings.TrimPrefix(r.URL.Path, env.GetURLPrefix()+"/auth/")
 
 	sessionID, err := env.AuthService.Auth(magiclinkid)
 	if err != nil {

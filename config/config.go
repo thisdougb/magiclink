@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 )
@@ -28,23 +29,34 @@ var defaultValues = map[string]interface{}{
 	"SESSION_EXPIRES_MINS":         10080,              // our cookie expires after this many minutes (1 week)
 	"RATE_LIMIT_MAX_SEND_REQUESTS": 3,                  // max requests for a magic link within TIME_PERIOD
 	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                 // time period within which we rate limit
+	"SESSION_OWNER_PROTECTED_URL":  "",                 // we can expose a protected URL to return session owner
+	"SESSION_OWNER_ACCESS_TOKENS":  "",                 // session owner access tokens - off by default
 }
 
 // Public methods here.
 // Use typed methods so we avoid type assertions at point of use.
 func (c *Config) ValueAsStr(key string) string {
 
+	c.mapHasKey(key) // check key exists
 	defaultValue := defaultValues[key].(string)
 	return c.getEnvVar(key, defaultValue).(string)
 }
 
 func (c *Config) ValueAsInt(key string) int {
 
+	c.mapHasKey(key) // check key exists
 	defaultValue := defaultValues[key].(int)
 	return c.getEnvVar(key, defaultValue).(int)
 }
 
 // Private methods here
+func (c *Config) mapHasKey(key string) bool {
+	if _, ok := defaultValues[key]; ok {
+		return true
+	}
+	log.Fatal("Config.mapHasKey: trying to access non-existant config key: ", key)
+	return false
+}
 func (c *Config) getEnvVar(key string, fallback interface{}) interface{} {
 
 	fullEnvVarName := fmt.Sprintf("%s%s", envVarPrefix, key)
