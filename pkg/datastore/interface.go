@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"github.com/thisdougb/magiclink/pkg/usecase/auth"
+	"github.com/thisdougb/magiclink/pkg/usecase/owner"
 	"github.com/thisdougb/magiclink/pkg/usecase/send"
 )
 
@@ -12,4 +13,5 @@ type DatastoreInterface interface {
 
 	send.Repository
 	auth.Repository
+	owner.Repository
 }

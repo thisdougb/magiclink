@@ -5,6 +5,7 @@ import (
 	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/datastore/redis"
 	"github.com/thisdougb/magiclink/pkg/usecase/auth"
+	"github.com/thisdougb/magiclink/pkg/usecase/owner"
 	"github.com/thisdougb/magiclink/pkg/usecase/send"
 	"log"
 	"net/http"
@@ -25,13 +26,24 @@ func main() {
 	defer ds.Disconnect()
 
 	env := &handlers.Env{
-		SendService: send.NewService(ds),
-		AuthService: auth.NewService(ds),
+		SendService:  send.NewService(ds),
+		AuthService:  auth.NewService(ds),
+		OwnerService: owner.NewService(ds),
 	}
 
-	http.HandleFunc("/send/", env.Send)
-	http.HandleFunc("/auth/", env.Auth)
+	urlPrefix := env.GetURLPrefix()
 
-	log.Println("webserver.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
+	http.HandleFunc(urlPrefix+"/send/", env.Send)
+	http.HandleFunc(urlPrefix+"/auth/", env.Auth)
+
+	// we only expose this endpoint if required. alternative method to get session
+	// owner is directly via Redis, in the caller app. by default this is turned off.
+	sessionOwnerURL := cfg.ValueAsStr("SESSION_OWNER_PROTECTED_URL")
+	if sessionOwnerURL != "" {
+		log.Println("Adding handler for session owner endpoint:", sessionOwnerURL)
+		http.HandleFunc(urlPrefix+sessionOwnerURL, env.Owner)
+	}
+
+	log.Println("magiclink.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
 	log.Fatal(http.ListenAndServe(":"+cfg.ValueAsStr("API_PORT"), nil))
 }

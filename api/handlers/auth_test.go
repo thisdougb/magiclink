@@ -62,7 +62,7 @@ func TestAuthWeb(t *testing.T) {
 		rr := httptest.NewRecorder()
 		handler := http.HandlerFunc(env.Auth)
 
-		httpURL := fmt.Sprintf("http://localhost/auth/%s", item.MagicLinkID)
+		httpURL := fmt.Sprintf("http://localhost%s%s%s", env.GetURLPrefix(), "/auth/", item.MagicLinkID)
 
 		req, err := http.NewRequest(item.httpMethod, httpURL, nil)
 		if err != nil {
