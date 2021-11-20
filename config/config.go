@@ -7,7 +7,7 @@
 
    In code we can safely call for the config value, which returns the env var value or the default:
 
-   	    if cfg.ValueAsBool("SMTP_ENABLED") {
+   	if cfg.ValueAsBool("SMTP_ENABLED") {
             // do stuff
         }
 */
