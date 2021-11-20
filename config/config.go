@@ -1,3 +1,17 @@
+/*
+   A flexible configuration system, which is hopefully easy to use in a Go context.
+
+   Defaults are set here, but can be overridden using env vars (k8s friendly).
+
+   Set the env var with the envVarPrefix, such as:
+
+       $ export MAGICLINK_MAGICLINK_EXPIRES_MINS=15
+
+   In code we can safely call for the config value, which returns the env var value or the default:
+
+   	ttlSeconds := 60 * cfg.ValueAsInt("MAGICLINK_EXPIRES_MINS") // seconds * minutes
+
+*/
 package config
 
 import (
