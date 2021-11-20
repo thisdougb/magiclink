@@ -17,21 +17,21 @@ const (
 // Default values can be override with env vars, eg 'export MAGICLINK_API_PORT=80'
 // We don't use the envVarPrefix internally, to stay portable.
 var defaultValues = map[string]interface{}{
-	"API_PORT":                     "8080",                            // api listens on this port
-	"URL_PREFIX":                   "/magiclink/",                     // all inbound urls will be prefixed with this value
-	"REDIS_HOST":                   "localhost",                       // redis host name
-	"REDIS_PORT":                   "6379",                            // redis port
-	"REDIS_KEY_PREFIX":             "magiclink:",                      // all redis keys will be prefixed with this value
-	"MAGICLINK_URL":                "https://ilka.io/magiclink/auth/", // auto-expire magic link id's
-	"MAGICLINK_EXPIRES_MINS":       15,                                // auto-expire magic link id's
-	"MAGICLINK_LENGTH":             64,                                // length of the id string
-	"SESSION_NAME":                 "MagicLinkSession",                // cookie session name after auth
-	"SESSION_ID_LENGTH":            64,                                // our cookie session id length
-	"SESSION_EXPIRES_MINS":         10080,                             // our cookie expires after this many minutes (1 week)
-	"RATE_LIMIT_MAX_SEND_REQUESTS": 3,                                 // max requests for a magic link within TIME_PERIOD
-	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                                // time period within which we rate limit
-	"SESSION_OWNER_PROTECTED_URL":  "",                                // we can expose a protected URL to return session owner
-	"SESSION_OWNER_ACCESS_TOKENS":  "",                                // session owner access tokens - off by default
+	"API_PORT":                     "8080",                                // api listens on this port
+	"URL_PREFIX":                   "/magiclink/",                         // all inbound urls will be prefixed with this value
+	"REDIS_HOST":                   "localhost",                           // redis host name
+	"REDIS_PORT":                   "6379",                                // redis port
+	"REDIS_KEY_PREFIX":             "magiclink:",                          // all redis keys will be prefixed with this value
+	"MAGICLINK_URL":                "https://override.me/magiclink/auth/", // this is prepended to the magic link id
+	"MAGICLINK_EXPIRES_MINS":       15,                                    // auto-expire magic link id's
+	"MAGICLINK_LENGTH":             64,                                    // length of the id string
+	"SESSION_NAME":                 "MagicLinkSession",                    // cookie session name after auth
+	"SESSION_ID_LENGTH":            64,                                    // our cookie session id length
+	"SESSION_EXPIRES_MINS":         10080,                                 // our cookie expires after this many minutes (1 week)
+	"RATE_LIMIT_MAX_SEND_REQUESTS": 3,                                     // max requests for a magic link within TIME_PERIOD
+	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                                    // time period within which we rate limit
+	"SESSION_OWNER_PROTECTED_URL":  "",                                    // we can expose a protected URL to return session owner
+	"SESSION_OWNER_ACCESS_TOKENS":  "",                                    // session owner access tokens - off by default
 }
 
 // Public methods here.
