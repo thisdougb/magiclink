@@ -41,6 +41,25 @@ func TestValueAsInt(t *testing.T) {
 	os.Unsetenv("MAGICLINK_MAGICLINK_LENGTH")
 }
 
+func TestValueAsBool(t *testing.T) {
+
+	var cfg *Config // dynamic config settings
+
+	// test: no env var, should return default
+	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
+	assert.Equal(t, false, cfg.ValueAsBool("SMTP_ENABLED"), "no env var set")
+
+	// test: setting an env var override
+	os.Setenv("MAGICLINK_SMTP_ENABLED", "true")
+	assert.Equal(t, true, cfg.ValueAsBool("SMTP_ENABLED"), "env var set")
+	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
+
+	// test: setting an env var override to non-int
+	os.Setenv("MAGICLINK_SMTP_ENABLED", ";")
+	assert.Equal(t, false, cfg.ValueAsBool("SMTP_ENABLED"), "env var not int")
+	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
+}
+
 func TestGetEnvVar(t *testing.T) {
 
 	var cfg *Config // dynamic config settings
