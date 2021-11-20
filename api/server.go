@@ -4,6 +4,7 @@ import (
 	"github.com/thisdougb/magiclink/api/handlers"
 	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/datastore/redis"
+	"github.com/thisdougb/magiclink/pkg/routine/mailer"
 	"github.com/thisdougb/magiclink/pkg/usecase/auth"
 	"github.com/thisdougb/magiclink/pkg/usecase/owner"
 	"github.com/thisdougb/magiclink/pkg/usecase/send"
@@ -25,6 +26,14 @@ func main() {
 	}
 	defer ds.Disconnect()
 
+	if cfg.ValueAsBool("SMTP_ENABLED") {
+		log.Println("SMTP mailer enabled")
+		go mailer.Poll()
+
+	} else {
+		log.Println("SMTP mailer disabled")
+	}
+
 	env := &handlers.Env{
 		SendService:  send.NewService(ds),
 		AuthService:  auth.NewService(ds),
@@ -44,6 +53,6 @@ func main() {
 		http.HandleFunc(urlPrefix+sessionOwnerURL, env.Owner)
 	}
 
-	log.Println("magiclink.Start(): listening on port", cfg.ValueAsStr("API_PORT"))
+	log.Println("listening on port", cfg.ValueAsStr("API_PORT"))
 	log.Fatal(http.ListenAndServe(":"+cfg.ValueAsStr("API_PORT"), nil))
 }
