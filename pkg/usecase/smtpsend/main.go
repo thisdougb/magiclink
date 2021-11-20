@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/smtp"
+	"strings"
 )
 
 func (s *Service) SendMagicLink(to string, magicLinkURL string) error {
@@ -31,6 +32,11 @@ func (s *Service) SendMagicLink(to string, magicLinkURL string) error {
 	buf := new(bytes.Buffer)
 	if err = t.Execute(buf, input); err != nil {
 		return err
+	}
+
+	if !strings.Contains(cfg.ValueAsStr("SMTP_ALLOWED_RECIPIENTS"), input.ToAddress) {
+		log.Printf("smtpsend.SendMagicLink() refusing to send to %s, not in SMTP_ALLOWED_RECIPIENTS", input.ToAddress)
+		return nil
 	}
 
 	request.Body = buf.String()

@@ -32,11 +32,12 @@ var defaultValues = map[string]interface{}{
 	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                                    // time period within which we rate limit
 	"SESSION_OWNER_PROTECTED_URL":  "",                                    // we can expose a protected URL to return session owner
 	"SESSION_OWNER_ACCESS_TOKENS":  "",                                    // session owner access tokens - off by default
-	"SMTP_ENABLED":                 false,
-	"SMTP_HOST":                    "change.me",
-	"SMTP_PORT":                    "25",
-	"SMTP_USER":                    "",
-	"SMTP_PASSWORD":                "",
+	"SMTP_ENABLED":                 false,                                 // experimental
+	"SMTP_HOST":                    "change.me",                           // experimental
+	"SMTP_PORT":                    "25",                                  // experimental
+	"SMTP_USER":                    "",                                    // experimental
+	"SMTP_PASSWORD":                "",                                    // experimental
+	"SMTP_ALLOWED_RECIPIENTS":      "",                                    // experimental
 }
 
 // Public methods here.

@@ -99,3 +99,18 @@ Once that's done, you can then go back and with a rolling deployment of magiclin
 ```
 [magiclink] $ export MAGICLINK_SESSION_OWNER_ACCESS_TOKENS='token2'
 ```
+### Experimental
+I'm adding experimental features here.
+Don't use them in any public facing environment, just for development.
+
+#### SMTP Mailer
+By adding these env vars, you can turn on sending of the magiclink login requests.
+The magiclink app will now start send magiclink login requests.
+```
+[magiclink] $ export MAGICLINK_SMTP_ENABLED=true
+[magiclink] $ export MAGICLINK_SMTP_USER=mylogin@mydomain.com
+[magiclink] $ export MAGICLINK_SMTP_PASSWORD=password  
+[magiclink] $ export MAGICLINK_SMTP_HOST=my.host.com
+[magiclink] $ export MAGICLINK_SMTP_PORT=587
+[magiclink] $ export MAGICLINK_SMTP_ALLOWED_RECIPIENTS='me@mydomain.com'
+```
