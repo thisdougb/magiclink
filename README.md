@@ -34,15 +34,16 @@ MAGICLINK_API_PORT| 8080 | The web server listens on this port.
 MAGICLINK_REDIS_HOST | redis | Host name for the redis instance.
 MAGICLINK_REDIS_PORT | 6379 | Port of the redis instance.
 MAGICLINK_REDIS_KEY_PREFIX | magiclink | All redis database keys are prefixed with this string, to keep things isolated.
+MAGICLINK_MAGICLINK_URL | https://override.me/magiclink/auth/ | The root of the login URL sent to users.
 MAGICLINK_MAGICLINK_LENGTH | 64 | Length of the magiclink id string.
 MAGICLINK_MAGICLINK_EXPIRES_MINS | 15 | Expiry time of magic link IDs, in minutes.
+MAGICLINK_RATE_LIMIT_MAX_SEND_REQUESTS | 3 | Maximum number of send requests per email.
+MAGICLINK_RATE_LIMIT_TIME_PERIOD_MINS | 15 | Time period over which max requests are limited, in minutes.
 MAGICLINK_SESSION_NAME | MagicLinkSession | Cookie session ID name.
 MAGICLINK_SESSION_ID_LENGTH | 64 | Length of cookie session ID string.
 MAGICLINK_SESSION_EXPIRES_MINS | 10080 | Expire time of session ID, in minutes.
-MAGICLINK_RATE_LIMIT_MAX_SEND_REQUESTS | 3 | Maximum number of send requests per email.
-MAGICLINK_RATE_LIMIT_TIME_PERIOD_MINS | 15 | Time period over which max requests are limited, in minutes.
 MAGICLINK_SESSION_OWNER_PROTECTED_URL |  | endpoint to lookup session owners - intended for protected use only
-MAGICLINK_SESSION_OWNER_ACCESS_TOKENS |  | a comma separate list of token id's
+MAGICLINK_SESSION_OWNER_ACCESS_TOKENS |  | comma separated list of token id's
 
 ### Login Request
 To trigger a magic-link login request, call the /send/ url.
@@ -97,4 +98,19 @@ Now you can redeploy your main app with token2.
 Once that's done, you can then go back and with a rolling deployment of magiclink remove the first token:
 ```
 [magiclink] $ export MAGICLINK_SESSION_OWNER_ACCESS_TOKENS='token2'
+```
+### Experimental
+I'm adding experimental features here.
+Don't use them in any public facing environment, just for development.
+
+#### SMTP Mailer
+By adding these env vars, you can turn on sending of the magiclink login requests.
+The magiclink app will now start send magiclink login requests.
+```
+[magiclink] $ export MAGICLINK_SMTP_ENABLED=true
+[magiclink] $ export MAGICLINK_SMTP_USER=mylogin@mydomain.com
+[magiclink] $ export MAGICLINK_SMTP_PASSWORD=password  
+[magiclink] $ export MAGICLINK_SMTP_HOST=my.host.com
+[magiclink] $ export MAGICLINK_SMTP_PORT=587
+[magiclink] $ export MAGICLINK_SMTP_ALLOWED_RECIPIENTS='me@mydomain.com'
 ```

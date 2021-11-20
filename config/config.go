@@ -32,6 +32,12 @@ var defaultValues = map[string]interface{}{
 	"RATE_LIMIT_TIME_PERIOD_MINS":  15,                                    // time period within which we rate limit
 	"SESSION_OWNER_PROTECTED_URL":  "",                                    // we can expose a protected URL to return session owner
 	"SESSION_OWNER_ACCESS_TOKENS":  "",                                    // session owner access tokens - off by default
+	"SMTP_ENABLED":                 false,                                 // experimental
+	"SMTP_HOST":                    "change.me",                           // experimental
+	"SMTP_PORT":                    "25",                                  // experimental
+	"SMTP_USER":                    "",                                    // experimental
+	"SMTP_PASSWORD":                "",                                    // experimental
+	"SMTP_ALLOWED_RECIPIENTS":      "",                                    // experimental
 }
 
 // Public methods here.
@@ -48,6 +54,13 @@ func (c *Config) ValueAsInt(key string) int {
 	c.mapHasKey(key) // check key exists
 	defaultValue := defaultValues[key].(int)
 	return c.getEnvVar(key, defaultValue).(int)
+}
+
+func (c *Config) ValueAsBool(key string) bool {
+
+	c.mapHasKey(key) // check key exists
+	defaultValue := defaultValues[key].(bool)
+	return c.getEnvVar(key, defaultValue).(bool)
 }
 
 // Private methods here
@@ -67,14 +80,20 @@ func (c *Config) getEnvVar(key string, fallback interface{}) interface{} {
 	}
 
 	switch fallback.(type) {
-	case string:
-		return value
+	case bool:
+		valueAsInt, err := strconv.ParseBool(value)
+		if err != nil {
+			return fallback
+		}
+		return valueAsInt
 	case int:
 		valueAsInt, err := strconv.Atoi(value)
 		if err != nil {
 			return fallback
 		}
 		return valueAsInt
+	case string:
+		return value
 	}
 	return fallback
 }

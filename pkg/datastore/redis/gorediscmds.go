@@ -14,6 +14,16 @@ func (d *Datastore) lpushToList(key string, data string) error {
 	return nil
 }
 
+func (d *Datastore) lpopFromtList(key string) (string, error) {
+
+	value, err := d.client.LPop(d.ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return value, nil
+}
+
 func (d *Datastore) setWithExpiry(key string, data string, ttlSeconds int) error {
 
 	ttl := time.Duration(ttlSeconds) * time.Second
