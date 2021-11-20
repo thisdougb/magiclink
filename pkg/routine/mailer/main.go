@@ -5,6 +5,7 @@ import (
 	"github.com/thisdougb/magiclink/config"
 	"github.com/thisdougb/magiclink/pkg/datastore/redis"
 	"github.com/thisdougb/magiclink/pkg/usecase/poll"
+	"github.com/thisdougb/magiclink/pkg/usecase/smtpsend"
 	"log"
 	"os"
 	"time"
@@ -23,14 +24,13 @@ func Poll() {
 
 	result := ds.Connect()
 	if !result {
-		log.Println("Datasore connection failed, exiting...")
+		log.Println("routine.Poll() Datasore connection failed, exiting...")
 		os.Exit(1)
 	}
 	defer ds.Disconnect()
 
 	pollService := poll.NewService(ds)
-
-	//	smtpService := smtpsend.NewService(ds)
+	smtpService := smtpsend.NewService(ds)
 
 	for {
 
@@ -52,16 +52,15 @@ func Poll() {
 
 		err := json.Unmarshal([]byte(nextTask), task)
 		if err != nil {
-			log.Println("routine.Poll: queue entry is invalid:", err.Error())
+			log.Println("routine.Poll() queue entry is invalid:", err.Error())
 			continue
 		}
 
-		log.Println("routine.Poll: Processing task for: ", task.Email)
-		//err = smtpService.SendMagicLink(task.Email, task.MagicLinkURL)
-		//if err != nil {
-		//	log.Println(err.Error())
-		// requeue message
-		//}
-
+		log.Println("routine.Poll() sending magiclink to", task.Email)
+		err = smtpService.SendMagicLink(task.Email, task.MagicLinkURL)
+		if err != nil {
+			log.Println(err.Error())
+			// do not requeue message
+		}
 	}
 }
