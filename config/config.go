@@ -1,16 +1,15 @@
 /*
-   A flexible configuration system, which is hopefully easy to use in a Go context.
+   A config system, with Go + Kubernetes in mind.
 
-   Defaults are set here, but can be overridden using env vars (k8s friendly).
+   Override the default using an env var (including envVarPrefix), such as:
 
-   Set the env var with the envVarPrefix, such as:
-
-       $ export MAGICLINK_MAGICLINK_EXPIRES_MINS=15
+       $ export MAGICLINK_SMTP_ENABLED=true
 
    In code we can safely call for the config value, which returns the env var value or the default:
 
-   	ttlSeconds := 60 * cfg.ValueAsInt("MAGICLINK_EXPIRES_MINS") // seconds * minutes
-
+   	    if cfg.ValueAsBool("SMTP_ENABLED") {
+            // do stuff
+        }
 */
 package config
 
@@ -28,7 +27,6 @@ const (
 	envVarPrefix = "MAGICLINK_"
 )
 
-// Default values can be override with env vars, eg 'export MAGICLINK_API_PORT=80'
 // We don't use the envVarPrefix internally, to stay portable.
 var defaultValues = map[string]interface{}{
 	"API_PORT":                     "8080",                                // api listens on this port
@@ -47,7 +45,7 @@ var defaultValues = map[string]interface{}{
 	"SESSION_OWNER_PROTECTED_URL":  "",                                    // we can expose a protected URL to return session owner
 	"SESSION_OWNER_ACCESS_TOKENS":  "",                                    // session owner access tokens - off by default
 	"SMTP_ENABLED":                 false,                                 // experimental
-	"SMTP_HOST":                    "change.me",                           // experimental
+	"SMTP_HOST":                    "",                                    // experimental
 	"SMTP_PORT":                    "25",                                  // experimental
 	"SMTP_USER":                    "",                                    // experimental
 	"SMTP_PASSWORD":                "",                                    // experimental
