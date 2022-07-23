@@ -52,6 +52,7 @@ jobs:
           run: go build -tags prod -v -o magiclink api/server.go
 
         - name: Deploy Image To Docker Hub
+          if: ${{ github.repository == 'thisdougb/magiclink' }}
           uses: docker/build-push-action@v1.1.0
           with:
               username: ${{ secrets.DOCKER_USERNAME }}
