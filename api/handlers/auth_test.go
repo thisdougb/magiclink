@@ -1,3 +1,5 @@
+//go:build dev || test
+
 package handlers
 
 import (
