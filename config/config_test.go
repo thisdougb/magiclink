@@ -1,5 +1,4 @@
 //go:build dev || test
-// +build dev test
 
 package config
 

@@ -15,10 +15,13 @@ const (
 
 // We don't use the envVarPrefix internally, to stay portable.
 var defaultValues = map[string]interface{}{
-	"API_PORT":                     "8080",                                // api listens on this port
-	"URL_PREFIX":                   "/magiclink/",                         // all inbound urls will be prefixed with this value
-	"REDIS_HOST":                   "localhost",                           // redis host name
-	"REDIS_PORT":                   "6379",                                // redis port
+	"API_PORT":                     "8080",        // api listens on this port
+	"URL_PREFIX":                   "/magiclink/", // all inbound urls will be prefixed with this value
+	"REDIS_HOST":                   "localhost",   // redis host name
+	"REDIS_PORT":                   "6379",        // redis port
+	"REDIS_USERNAME":               "",            // redis host name
+	"REDIS_PASSWORD":               "",            // redis host name
+	"REDIS_TLS":                    false,
 	"REDIS_KEY_PREFIX":             "magiclink:",                          // all redis keys will be prefixed with this value
 	"MAGICLINK_URL":                "https://override.me/magiclink/auth/", // this is prepended to the magic link id
 	"MAGICLINK_EXPIRES_MINS":       15,                                    // auto-expire magic link id's
