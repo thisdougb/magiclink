@@ -2,6 +2,6 @@
 
 package config
 
-func GetTemplatePath(fileName string) string {
+func (c *Config) GetTemplatePath(fileName string) string {
 	return "/app/pkg/templates/" + fileName
 }
