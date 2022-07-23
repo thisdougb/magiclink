@@ -7,7 +7,6 @@ import (
 	"github.com/thisdougb/magiclink/pkg/usecase/poll"
 	"github.com/thisdougb/magiclink/pkg/usecase/smtpsend"
 	"log"
-	"os"
 	"time"
 )
 
@@ -20,12 +19,26 @@ func Poll() {
 
 	var cfg *config.Config // dynamic config settings
 
-	ds := redis.NewRedisDatastore(cfg.ValueAsStr("REDIS_HOST"), cfg.ValueAsStr("REDIS_PORT"))
+	ds := redis.NewRedisDatastore(
+		cfg.ValueAsStr("REDIS_HOST"),
+		cfg.ValueAsStr("REDIS_PORT"),
+		cfg.ValueAsStr("REDIS_USERNAME"),
+		cfg.ValueAsStr("REDIS_PASSWORD"),
+		cfg.ValueAsBool("REDIS_TLS"))
 
-	result := ds.Connect()
-	if !result {
-		log.Println("routine.Poll() Datasore connection failed, exiting...")
-		os.Exit(1)
+	for {
+		log.Printf("Datastore connecting, host: %s:%s, username: %s\n",
+			cfg.ValueAsStr("REDIS_HOST"),
+			cfg.ValueAsStr("REDIS_PORT"),
+			cfg.ValueAsStr("REDIS_USERNAME"))
+
+		err := ds.Connect()
+		if err == nil {
+			log.Println("Datastore connected.")
+			break
+		}
+		log.Println("Datastore connect failed:", err.Error())
+		time.Sleep(5 * time.Second)
 	}
 	defer ds.Disconnect()
 

@@ -24,7 +24,7 @@ func (s *Service) SendMagicLink(to string, magicLinkURL string) error {
 
 	request := mlmsg.NewMagicLinkMsg()
 
-	templateFileName := config.GetTemplatePath("sendmagiclink.gohtml")
+	templateFileName := cfg.GetTemplatePath("sendmagiclink.gohtml")
 	t, err := template.ParseFiles(templateFileName)
 	if err != nil {
 		return err

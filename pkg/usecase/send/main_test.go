@@ -1,4 +1,4 @@
-// +build dev test
+//go:build dev || test
 
 package send
 

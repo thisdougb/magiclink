@@ -58,3 +58,25 @@ spec:
               value: "3"
             - name: "MAGICLINK_RATE_LIMIT_TIME_PERIOD_MINS"
               value: "15"
+            - name: MAGICLINK_REDIS_HOST
+              valueFrom:
+                  secretKeyRef:
+                      name: redisconnection
+                      key: redis_host
+            - name: MAGICLINK_REDIS_PORT
+              valueFrom:
+                  secretKeyRef:
+                      name: redisconnection
+                      key: redis_port
+            - name: MAGICLINK_REDIS_USERNAME
+              valueFrom:
+                  secretKeyRef:
+                      name: redisconnection
+                      key: redis_username
+            - name: MAGICLINK_REDIS_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                      name: redisconnection
+                      key: redis_password
+            - name: MAGICLINK_REDIS_TLS
+              value: "true"

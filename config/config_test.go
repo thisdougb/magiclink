@@ -1,4 +1,4 @@
-// +build dev test
+//go:build dev || test
 
 package config
 
@@ -8,72 +8,85 @@ import (
 	"testing"
 )
 
+// adds our test values
+func init() {
+	defaultValues["_TEST_INT_TEN"] = 10
+	defaultValues["_TEST_STR_AAA"] = "AAA"
+	defaultValues["_TEST_BOOL_TLS"] = false
+}
+
 func TestValueAsStr(t *testing.T) {
 
 	var cfg *Config // dynamic config settings
 
-	// test: no env var, should return default
-	os.Unsetenv("MAGICLINK_API_PORT")
-	assert.Equal(t, "8080", cfg.ValueAsStr("API_PORT"), "no env var set")
+	// test: unset potential env var, this should return the Str value in defaultValue[map]
+	os.Unsetenv(envVarPrefix + "_TEST_STR_AAA")
+	assert.Equal(t, "AAA", cfg.ValueAsStr("_TEST_STR_AAA"), "no env var set")
 
-	// test: setting an env var override
-	os.Setenv("MAGICLINK_API_PORT", "hello")
-	assert.Equal(t, "hello", cfg.ValueAsStr("API_PORT"), "env var set")
-	os.Unsetenv("MAGICLINK_API_PORT")
+	// test: now override the defaultValue[map] using an env var value
+	os.Setenv(envVarPrefix+"_TEST_STR_AAA", "hello")
+	assert.Equal(t, "hello", cfg.ValueAsStr("_TEST_STR_AAA"), "env var set")
+	os.Unsetenv(envVarPrefix + "_TEST_STR_AAA")
 }
 
 func TestValueAsInt(t *testing.T) {
 
 	var cfg *Config // dynamic config settings
 
-	// test: no env var, should return default
-	os.Unsetenv("MAGICLINK_MAGICLINK_LENGTH")
-	assert.Equal(t, 64, cfg.ValueAsInt("MAGICLINK_LENGTH"), "no env var set")
+	// test: unset potential env var, this should return the int value in defaultValue[map]
+	os.Unsetenv(envVarPrefix + "_TEST_INT_TEN")
+	assert.Equal(t, 10, cfg.ValueAsInt("_TEST_INT_TEN"), "no env var set")
 
-	// test: setting an env var override
-	os.Setenv("MAGICLINK_MAGICLINK_LENGTH", "32")
-	assert.Equal(t, 32, cfg.ValueAsInt("MAGICLINK_LENGTH"), "env var set")
-	os.Unsetenv("MAGICLINK_MAGICLINK_LENGTH")
+	// test: now override the defaultValue[map] using an env var value
+	os.Setenv(envVarPrefix+"_TEST_INT_TEN", "20")
+	assert.Equal(t, 20, cfg.ValueAsInt("_TEST_INT_TEN"), "env var set")
+	os.Unsetenv(envVarPrefix + "_TEST_INT_TEN")
 
-	// test: setting an env var override to non-int
-	os.Setenv("MAGICLINK_MAGICLINK_LENGTH", ";")
-	assert.Equal(t, 64, cfg.ValueAsInt("MAGICLINK_LENGTH"), "env var not int")
-	os.Unsetenv("MAGICLINK_MAGICLINK_LENGTH")
+	// test: now we use a non-int env var, which should be ignored
+	os.Setenv(envVarPrefix+"_TEST_INT_TEN", ";")
+	assert.Equal(t, 10, cfg.ValueAsInt("_TEST_INT_TEN"), "env var not int")
+	os.Unsetenv(envVarPrefix + "_TEST_INT_TEN")
+
 }
 
 func TestValueAsBool(t *testing.T) {
 
 	var cfg *Config // dynamic config settings
 
-	// test: no env var, should return default
-	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
-	assert.Equal(t, false, cfg.ValueAsBool("SMTP_ENABLED"), "no env var set")
+	// test: unset potential env var, this should return the int value in defaultValue[map]
+	os.Unsetenv(envVarPrefix + "_TEST_BOOL_TLS")
+	assert.Equal(t, false, cfg.ValueAsBool("_TEST_BOOL_TLS"), "no env var set")
 
-	// test: setting an env var override
-	os.Setenv("MAGICLINK_SMTP_ENABLED", "true")
-	assert.Equal(t, true, cfg.ValueAsBool("SMTP_ENABLED"), "env var set")
-	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
+	// test: now override the defaultValue[map] using an env var value
+	os.Setenv(envVarPrefix+"_TEST_BOOL_TLS", "true")
+	assert.Equal(t, true, cfg.ValueAsBool("_TEST_BOOL_TLS"), "env var set")
+	os.Unsetenv(envVarPrefix + "_TEST_BOOL_TLS")
 
-	// test: setting an env var override to non-int
-	os.Setenv("MAGICLINK_SMTP_ENABLED", ";")
-	assert.Equal(t, false, cfg.ValueAsBool("SMTP_ENABLED"), "env var not int")
-	os.Unsetenv("MAGICLINK_SMTP_ENABLED")
+	// test: now we use a non-int env var, which should be ignored
+	os.Setenv(envVarPrefix+"_TEST_BOOL_TLS", "hello")
+	assert.Equal(t, false, cfg.ValueAsBool("_TEST_BOOL_TLS"), "env var not int")
+	os.Unsetenv(envVarPrefix + "_TEST_BOOL_TLS")
 }
-
 func TestGetEnvVar(t *testing.T) {
 
 	var cfg *Config // dynamic config settings
 
-	// test: no env var, should return default
-	os.Setenv("MAGICLINK_TEST_STR", "success")
-	assert.Equal(t, "success", cfg.getEnvVar("TEST_STR", "success"), "TEST_STR")
-	os.Unsetenv("MAGICLINK_TEST_STR")
+	// test: when we set a str env var, should should get that value
+	os.Setenv(envVarPrefix+"_TEST_STR_ISSET", "isset")
+	assert.Equal(t, "isset", cfg.getEnvVar("_TEST_STR_ISSET", "isset"), "_TEST_STR_ISSET")
+	os.Unsetenv(envVarPrefix + "_TEST_STR_ISSET")
 
-	os.Setenv("MAGICLINKTEST_INT", "32")
-	assert.Equal(t, 1, cfg.getEnvVar("TEST_INT", 1), "TEST_INT")
-	os.Unsetenv("MAGICLINKTEST_INT")
+	// test: when no env var exists we should use the fallback value in 2nd arg
+	assert.Equal(t, "fallback", cfg.getEnvVar("_TEST_STR_ISSET", "fallback"), "_TEST_STR_ISSET")
 
-	os.Setenv("MAGICLINK_TEST_UNKNOWN", "2.2")
+	// test: when we set an int env var, should should get that value
+	os.Setenv(envVarPrefix+"_TEST_INT", "32")
+	assert.Equal(t, 32, cfg.getEnvVar("_TEST_INT", 1), "_TEST_INT")
+	os.Unsetenv(envVarPrefix + "_TEST_INT")
+
+	// test: when we set a non-int env var, should should get the fallback value
+	// this is because we don't convert non-int automatically in getEnvVar
+	os.Setenv(envVarPrefix+"TEST_UNKNOWN", "2.2")
 	assert.Equal(t, 1.1, cfg.getEnvVar("TEST_UNKNOWN", 1.1), "TEST_UNKNOWN")
-	os.Unsetenv("MAGICLINK_TEST_UNKNOWN")
+	os.Unsetenv(envVarPrefix + "TEST_UNKNOWN")
 }
